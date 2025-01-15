@@ -51,7 +51,7 @@ bool DynamicPathfinding::Init()
 			_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 			if (!_renderer)
 			{
-				printf("Renderer could not be created SDL Error: %s\n", SDL_GetError);
+				printf("Renderer could not be created SDL Error: %s\n", SDL_GetError());
 				success = false;
 			}
 			else
