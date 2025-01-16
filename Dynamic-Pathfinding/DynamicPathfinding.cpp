@@ -74,7 +74,7 @@ bool DynamicPathfinding::Init()
 			}
 
 			_grid = new Grid;
-			_grid->GenerateGrid();
+			//_grid->GenerateGrid();
 
 			//update surface
 			SDL_UpdateWindowSurface(_window);
@@ -99,8 +99,10 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				_quit = true;
 				break;
 			case SDL_KEYDOWN:
-				_quit = InputManager::HandleKeyInput(e);
+				_quit = InputManager::HandleKeyInput(&e);
 				break;
+			case SDL_MOUSEBUTTONDOWN:
+				InputManager::HandleMouseClick(&e, _grid);
 			default:
 				break;
 			}

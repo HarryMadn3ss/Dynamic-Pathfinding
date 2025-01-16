@@ -1,19 +1,35 @@
 #pragma once
-#include "commons.h"
 #include <SDL.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#include "commons.h"
+
+//TODO create an enum for the different levels/maps/wahtever you wanna call it 
+
+struct GridNode
+{
+	bool walkable = false;
+};
+
 
 class Grid
 {
 private:
-	int grid[GRID_WIDTH][GRID_HEIGHT];
+	GridNode grid[GRID_WIDTH][GRID_HEIGHT];
 
+	std::ifstream myFile;
 protected:
 
 public:
 	Grid();
 	~Grid();
 	void GenerateGrid();
+	void ReGenerateGrid(std::string path);
 
 	void RenderGrid(SDL_Renderer* renderer);
+
+	GridNode* GetGridNode(int x, int y);
 };
 
