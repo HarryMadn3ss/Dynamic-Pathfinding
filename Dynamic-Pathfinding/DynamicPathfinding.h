@@ -8,6 +8,10 @@
 #include "InputManager.h"
 #include "Grid.h"
 
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 class DynamicPathfinding
 {
@@ -18,6 +22,9 @@ private:
 	SDL_Texture*  _texture = NULL;
 	SDL_Renderer* _renderer = NULL;	
 	Grid* _grid = NULL;
+
+	//ImGuiContext* _imGuiContext = NULL;
+	bool _imGuiWindow = true;
 
 	//main loop flag
 	bool _quit = false;

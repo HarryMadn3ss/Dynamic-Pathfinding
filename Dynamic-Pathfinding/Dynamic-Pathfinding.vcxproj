@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\w016075m\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\w016075m\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\imgui;C:\Users\w016075m\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\w016075m\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -141,6 +141,14 @@
     <ClCompile Include="DynamicPathfinding.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="Includes\imgui\backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="Includes\imgui\backends\imgui_impl_sdlrenderer2.cpp" />
+    <ClCompile Include="Includes\imgui\imgui.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Includes\imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -154,6 +162,12 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Includes\imgui\misc\debuggers\imgui.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Includes\imgui\misc\debuggers\imgui.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

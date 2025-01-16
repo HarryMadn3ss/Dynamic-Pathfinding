@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+
 #include "commons.h"
 
 //TODO create an enum for the different levels/maps/wahtever you wanna call it 
@@ -31,5 +32,7 @@ public:
 	void RenderGrid(SDL_Renderer* renderer);
 
 	GridNode* GetGridNode(int x, int y);
+
+	bool SaveCurrentGridLayout(std::string name);
 };
 

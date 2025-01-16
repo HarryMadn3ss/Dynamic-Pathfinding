@@ -96,7 +96,7 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 			else
 			{
 				SDL_Rect fillRect = { j * 20, i * 20, 20.0f, 20.0f };
-				SDL_SetRenderDrawColor(renderer, 0xFF + j*i, 0x00 + j*j, 0x00 + i*i, 0xFF);
+				SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
 				SDL_RenderFillRect(renderer, &fillRect);
 			}
 		}
@@ -106,4 +106,23 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 GridNode* Grid::GetGridNode(int x, int y)
 {
 	return &grid[x][y];
+}
+
+bool Grid::SaveCurrentGridLayout(std::string name)
+{
+	std::string pathName = "maps/" + name + ".txt";
+
+	std::ofstream file(pathName);
+	if (!file.good()) return false;
+
+	for (int i = 0; i < GRID_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_WIDTH; j++)
+		{
+			file << grid[j][i].walkable;
+		}
+		file << "\n";
+	}
+	file.close();
+	return true;
 }

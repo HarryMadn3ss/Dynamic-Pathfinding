@@ -73,6 +73,15 @@ bool DynamicPathfinding::Init()
 				}
 			}
 
+			//set up imgui
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;		
+			//set platform specs
+			ImGui_ImplSDL2_InitForSDLRenderer(_window, _renderer);
+			ImGui_ImplSDLRenderer2_Init(_renderer);
+
 			_grid = new Grid;
 			//_grid->GenerateGrid();
 
@@ -89,10 +98,10 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 	while (!_quit)
 	{
 
-
 		//handles events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
+			ImGui_ImplSDL2_ProcessEvent(&e);
 			switch (e.type)
 			{
 			case SDL_QUIT:
@@ -108,13 +117,31 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			}
 		}
 
+		//imgui frame
+		ImGui_ImplSDLRenderer2_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();		
+
+		if (_imGuiWindow)
+		{
+			ImGui::Begin("Map Saver", &_imGuiWindow);
+			//ImGui::Text("");
+			static std::string name;
+			ImGui::InputText("Map Name", &name);
+			if (ImGui::Button("Save"))
+			{
+				_grid->SaveCurrentGridLayout(name);
+			}
+			ImGui::End();
+		}
+
 		////blist = back buffer
 		//SDL_BlitSurface(gImageToLoad, NULL, gScreenSurface, NULL);
 		////switch buffers
 		//SDL_UpdateWindowSurface(gWindow);
 
 		//clear Screen
-		SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0xFF);
 		//doesnt clear paints over with the old colour
 		SDL_RenderClear(_renderer);
 
@@ -127,6 +154,10 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		//SDL_RenderFillRect(_renderer, &fillRect);
 
 		_grid->RenderGrid(_renderer);
+
+		//imgui
+		ImGui::Render();		
+		ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), _renderer);		
 
 		//update screen
 		SDL_RenderPresent(_renderer);
@@ -151,6 +182,11 @@ void DynamicPathfinding::Close()
 	//quit sdl subsystems
 	IMG_Quit();
 	SDL_Quit();
+
+	//ImGui
+	ImGui_ImplSDL2_Shutdown();
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui::DestroyContext();
 }
 
 

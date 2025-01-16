@@ -8,8 +8,10 @@ bool InputManager::HandleKeyInput(SDL_Event* e)
 		return true;
 		break;
 	default:
+		return false;
 		break;
 	}
+	return false;
 }
 
 void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
@@ -23,9 +25,11 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 	case 1: // left
 		//get the grid node its closest to
 		node =  grid->GetGridNode(round(x) / 20, round(y) / 20);
-		node->walkable = !node->walkable;
+		node->walkable = false;
 		break;
-	case 2: //right
+	case 3: //right
+		node = grid->GetGridNode(round(x) / 20, round(y) / 20);
+		node->walkable = true;
 		break;
 	default:
 		break;

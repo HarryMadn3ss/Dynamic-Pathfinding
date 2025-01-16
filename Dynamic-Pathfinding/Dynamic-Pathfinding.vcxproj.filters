@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="imGUI">
+      <UniqueIdentifier>{e9e8aa77-fada-4fca-ab74-97d744b7bd43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="dll\SDL2.dll" />
@@ -37,6 +40,30 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Includes\imgui\imgui.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\imgui_demo.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\imgui_draw.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\imgui_tables.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\imgui_widgets.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\backends\imgui_impl_sdl2.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Includes\imgui\backends\imgui_impl_sdlrenderer2.cpp">
+      <Filter>imGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageLoader.h">
@@ -51,5 +78,15 @@
     <ClInclude Include="Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Includes\imgui\misc\debuggers\imgui.natstepfilter">
+      <Filter>imGUI</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Includes\imgui\misc\debuggers\imgui.natvis">
+      <Filter>imGUI</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>
