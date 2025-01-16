@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="commons.h" />
     <ClCompile Include="DynamicPathfinding.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DynamicPathfinding.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
   </ItemGroup>

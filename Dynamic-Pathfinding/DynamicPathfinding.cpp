@@ -63,16 +63,18 @@ bool DynamicPathfinding::Init()
 				int imgFlags = IMG_INIT_PNG;
 				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
-					printf("PNG faild to Initialize! SDL_image Error: %s\n", IMG_GetError());
+					printf("PNG loader failed to Initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
 				else
 				{
 					//gTexture = LoadTexture("Images/pika.png");
 					// 
-
 				}
 			}
+
+			_grid = new Grid;
+			_grid->GenerateGrid();
 
 			//update surface
 			SDL_UpdateWindowSurface(_window);
@@ -118,9 +120,11 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
 
 		//render red quad
-		SDL_Rect fillRect = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-		SDL_SetRenderDrawColor(_renderer, 0xFF, 0x00, 0x00, 0xFF);
-		SDL_RenderFillRect(_renderer, &fillRect);
+		//SDL_Rect fillRect = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
+		//SDL_SetRenderDrawColor(_renderer, 0xFF, 0x00, 0x00, 0xFF);
+		//SDL_RenderFillRect(_renderer, &fillRect);
+
+		_grid->RenderGrid(_renderer);
 
 		//update screen
 		SDL_RenderPresent(_renderer);

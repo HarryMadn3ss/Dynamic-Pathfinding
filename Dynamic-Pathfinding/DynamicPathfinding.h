@@ -6,6 +6,7 @@
 
 #include "commons.h"
 #include "InputManager.h"
+#include "Grid.h"
 
 
 class DynamicPathfinding
@@ -16,6 +17,7 @@ private:
 	SDL_Surface*  _imageToLoad = NULL;
 	SDL_Texture*  _texture = NULL;
 	SDL_Renderer* _renderer = NULL;	
+	Grid* _grid = NULL;
 
 	//main loop flag
 	bool _quit = false;
