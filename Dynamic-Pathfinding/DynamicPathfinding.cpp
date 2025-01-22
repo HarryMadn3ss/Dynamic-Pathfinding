@@ -1,5 +1,9 @@
 #include "DynamicPathfinding.h"
 
+#include "Dijkstra.h"
+#include "Vector2.h"
+#include "Agent.h"
+
 
 bool DynamicPathfinding::Init()
 {
@@ -83,6 +87,8 @@ bool DynamicPathfinding::Init()
 			ImGui_ImplSDLRenderer2_Init(_renderer);
 
 			_grid = new Grid;
+			_agent = new Agent();
+			_dijkstra = new Dijkstra();
 			//_grid->GenerateGrid();
 
 			//update surface
@@ -132,6 +138,15 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				_grid->SaveCurrentGridLayout(name);
 			}
+			if (ImGui::Button("Dijkstra Find Path"))
+			{
+				if (_grid->goal) _dijkstra->CreatePath(*_grid, _agent->GetPos(), _grid->goal->position);
+
+				for (int i = 0; i < _dijkstra->finalPath.size(); i++)
+				{
+					_agent->MoveToPosition(_dijkstra->finalPath[i]);
+				}
+			}
 			ImGui::End();
 		}
 
@@ -154,6 +169,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		//SDL_RenderFillRect(_renderer, &fillRect);
 
 		_grid->RenderGrid(_renderer);
+		_agent->RenderAgent(_renderer);
 
 		//imgui
 		ImGui::Render();		

@@ -13,6 +13,10 @@
 #include "backends/imgui_impl_sdlrenderer2.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
+class Dijkstra;
+class Vector2;
+class Agent;
+
 class DynamicPathfinding
 {
 private:	
@@ -22,6 +26,8 @@ private:
 	SDL_Texture*  _texture = NULL;
 	SDL_Renderer* _renderer = NULL;	
 	Grid* _grid = NULL;
+	Agent* _agent = NULL;
+	Dijkstra* _dijkstra = NULL;
 
 	//ImGuiContext* _imGuiContext = NULL;
 	bool _imGuiWindow = true;

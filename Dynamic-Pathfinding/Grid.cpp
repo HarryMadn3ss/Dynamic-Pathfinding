@@ -13,7 +13,7 @@ Grid::Grid()
 	//		else grid[j][i] = 0;
 	//	}
 	//}
-	std::string path = "maps/map.txt";
+	std::string path = "maps/TestMap.txt";
 	myFile.open(path);
 	if (!myFile.good()) printf("Map file failed to open: path: %s\n", path);
 	else
@@ -28,7 +28,14 @@ Grid::Grid()
 			{
 				for (int j = 0; j < GRID_WIDTH; j++)
 				{					
-					grid[j][stringCount].walkable = fileReadIn[j] - '0';				
+					grid[j][stringCount].walkable = fileReadIn[j] - '0';
+					grid[j][stringCount].position = Vector2(j, stringCount);					
+					grid[j][stringCount].gCost = 1.0f;
+					grid[j][stringCount].hCost = 0.0f;	
+					grid[j][stringCount].fCost = 0.0f;	
+					grid[j][stringCount].parent = nullptr;
+					grid[j][stringCount].curentGoal = false;
+					grid[j][stringCount].node = nullptr;
 				}	
 				stringCount++;
 			}
@@ -86,17 +93,24 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 	{
 		for (int j = 0; j < GRID_WIDTH; j++)
 		{
+			if (grid[j][i].curentGoal)
+			{
+				SDL_Rect outlineRect = { j * 20, i * 20, 20.0f, 20.0f };
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xff);
+				SDL_RenderDrawRect(renderer, &outlineRect);
+				continue;
+			}
 			//can change the colours/fill amount based upon walkable/notwalkable
 			if (grid[j][i].walkable == 1) 
 			{
 				SDL_Rect outlineRect = { j * 20, i * 20, 20.0f, 20.0f };
-				SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xff);
+				SDL_SetRenderDrawColor(renderer, 0xaa, 0xFF, 0xaa, 0xff);
 				SDL_RenderDrawRect(renderer, &outlineRect);				
 			}
 			else
 			{
 				SDL_Rect fillRect = { j * 20, i * 20, 20.0f, 20.0f };
-				SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+				SDL_SetRenderDrawColor(renderer, 0xaa, 0xff, 0xaa, 0xff);
 				SDL_RenderFillRect(renderer, &fillRect);
 			}
 		}

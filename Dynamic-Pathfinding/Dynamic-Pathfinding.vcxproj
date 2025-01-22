@@ -137,7 +137,9 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Agent.cpp" />
     <ClCompile Include="commons.h" />
+    <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="DynamicPathfinding.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
@@ -151,6 +153,7 @@
     <ClCompile Include="Includes\imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="dll\SDL2_image.dll">
@@ -158,10 +161,13 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Agent.h" />
+    <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="DynamicPathfinding.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Includes\imgui\misc\debuggers\imgui.natstepfilter" />
