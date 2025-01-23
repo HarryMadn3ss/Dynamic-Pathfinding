@@ -21,7 +21,7 @@ void Agent::RenderAgent(SDL_Renderer* renderer)
 
 bool Agent::MoveToPosition(Vector2 goal, float dt)
 {
-	Vector2 dir = goal - position;
+	Vector2 dir = goal - Vector2(position.x - 2, position.y - 2);
 	float dist = dir.Magnitude();
 	if (dist < 0.01) return true;
 	dir = dir.Normalise();

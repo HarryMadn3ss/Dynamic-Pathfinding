@@ -39,15 +39,18 @@ bool Dijkstra::CreatePath(Grid& grid, Vector2 start)
 		for (int i = 0; i < 8; i++)
 		{
 			//if (GetNeighbour(grid, &current, i)) openList.push_back(GetNeighbour(grid, &current, i));
-
-			if (i % 2 != 0) continue;
+			//stop diag
+			//if (i % 2 != 0) continue;
 		
 			GridNode* neighbour = GetNeighbour(grid, current, i);		
 
-			if (!neighbour) continue;
-			//if (neighbour == NULL) continue;
-			if (!neighbour->walkable) continue;
-			if (CheckClosedList(neighbour) > -1) continue;
+			if (!neighbour || !neighbour->walkable || CheckClosedList(neighbour) > -1) continue;
+			//stop cutting corners
+			int j = i;
+			i == 7 ? j = -1 : j = i;
+			GridNode* right = GetNeighbour(grid, current, j + 1);
+			GridNode* left = GetNeighbour(grid, current, i - 1);
+			if (i % 2 != 0) if (left && left->walkable == false || right && right->walkable == false) continue;
 
 			float dist = (neighbour->position - current->position).Magnitude();
 
@@ -65,11 +68,12 @@ bool Dijkstra::CreatePath(Grid& grid, Vector2 start)
 			else
 			{			
 				neighbour->fCost = cost;
-				neighbour->parent = current;
+				neighbour->parent = current;			
 				openList.push_back(neighbour);
 			}
 		}
 
+		current->searched = true;
 		closedList.push_back(current);
 		openList.erase(openList.begin() + CheckOpenList(current));
 
@@ -139,6 +143,7 @@ void Dijkstra::SetPath(GridNode* end)
 	while (node)
 	{
 		finalPath.insert(finalPath.begin(), node->position * 20);
+		node->inPath = true;
 		node = node->parent;
 	}
 }

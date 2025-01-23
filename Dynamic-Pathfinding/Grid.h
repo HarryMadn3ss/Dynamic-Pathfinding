@@ -20,6 +20,7 @@ struct GridNode
 
 	bool curentGoal = false;
 	bool inPath = false;
+	bool searched = false;
 
 	GridNode()
 	{
@@ -61,5 +62,6 @@ public:
 	GridNode* goal = NULL;
 
 	Vector2 WorldToGrid(Vector2 pos) { return Vector2(round(pos.x) / 20 , round(pos.y) / 20  ); }
+	void ResetGrid();
 };
 

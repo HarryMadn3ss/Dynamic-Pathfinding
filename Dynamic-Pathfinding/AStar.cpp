@@ -24,6 +24,7 @@ void AStar::SetPath(GridNode* end)
     while (node)
     {
         finalPath.insert(finalPath.begin(), node->position * 20);
+        node->inPath = true;
         node = node->parent;
     }
 }
@@ -110,11 +111,20 @@ bool AStar::CreatePath(Grid& grid, Vector2 start)
 
         for (int i = 0; i < 8; i++)
         {
-            if (i % 2 != 0) continue;
+            //stop diag
+            //if (i % 2 != 0) continue;
 
             GridNode* neigbour = GetNeighbour(grid, current, i);
 
             if (!neigbour || !neigbour->walkable) continue;
+
+            //stop cutting corners
+            int j = i;
+            i == 7 ? j = -1 : j = i;
+            GridNode* right = GetNeighbour(grid, current, j + 1);
+            GridNode * left = GetNeighbour(grid, current, i - 1);
+
+            if (i % 2 != 0) if (left && left->walkable == false || right && right->walkable == false) continue;
 
             float dist = (neigbour->position - current->position).Magnitude();
 
@@ -155,6 +165,7 @@ bool AStar::CreatePath(Grid& grid, Vector2 start)
 
         }
 
+        current->searched = true;
         closedList.push_back(current);
         openList.erase(openList.begin() + CheckOpenList(current));
 

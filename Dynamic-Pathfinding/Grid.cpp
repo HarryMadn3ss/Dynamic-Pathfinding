@@ -37,6 +37,7 @@ Grid::Grid()
 					grid[j][stringCount].node = nullptr;
 					grid[j][stringCount].curentGoal = false;
 					grid[j][stringCount].inPath = false;
+					grid[j][stringCount].searched = false;
 				}	
 				stringCount++;
 			}
@@ -90,6 +91,7 @@ void Grid::ReGenerateGrid(std::string path)
 
 void Grid::RenderGrid(SDL_Renderer* renderer)
 {
+	//TODO: needs a refactor soon
 	for (int i = 0; i < GRID_HEIGHT; i++)
 	{
 		for (int j = 0; j < GRID_WIDTH; j++)
@@ -99,6 +101,20 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 				SDL_Rect outlineRect = { j * 20, i * 20, 20.0f, 20.0f };
 				SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xff);
 				SDL_RenderDrawRect(renderer, &outlineRect);
+				continue;
+			}
+			if (grid[j][i].inPath)
+			{
+				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
+				SDL_RenderFillRect(renderer, &rect);
+				continue;
+			}
+			if (grid[j][i].searched)
+			{
+				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
+				SDL_RenderDrawRect(renderer, &rect);
 				continue;
 			}
 			//can change the colours/fill amount based upon walkable/notwalkable
@@ -141,4 +157,17 @@ bool Grid::SaveCurrentGridLayout(std::string name)
 	}
 	file.close();
 	return true;
+}
+
+void Grid::ResetGrid()
+{
+	for (int i = 0; i < GRID_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_WIDTH; j++)
+		{
+			grid[j][i].inPath = false;
+			grid[j][i].searched = false;
+			grid[j][i].curentGoal = false;
+		}
+	}
 }

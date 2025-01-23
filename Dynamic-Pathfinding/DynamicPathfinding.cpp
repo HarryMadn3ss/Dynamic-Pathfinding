@@ -149,10 +149,12 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			}
 			if (ImGui::Button("Dijkstra Find Path"))
 			{
+				_grid->ResetGrid();
 				if (_grid->goal) _dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 			}
 			if (ImGui::Button("ASTAR find Path"))
 			{
+				_grid->ResetGrid();
 				if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 			}
 			ImGui::End();
