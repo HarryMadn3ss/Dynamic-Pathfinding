@@ -34,8 +34,9 @@ Grid::Grid()
 					grid[j][stringCount].hCost = 0.0f;	
 					grid[j][stringCount].fCost = 0.0f;	
 					grid[j][stringCount].parent = nullptr;
-					grid[j][stringCount].curentGoal = false;
 					grid[j][stringCount].node = nullptr;
+					grid[j][stringCount].curentGoal = false;
+					grid[j][stringCount].inPath = false;
 				}	
 				stringCount++;
 			}
@@ -119,6 +120,7 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 
 GridNode* Grid::GetGridNode(int x, int y)
 {
+	if (x >= GRID_WIDTH || y >= GRID_HEIGHT || x < 0 || y < 0) return nullptr;
 	return &grid[x][y];
 }
 

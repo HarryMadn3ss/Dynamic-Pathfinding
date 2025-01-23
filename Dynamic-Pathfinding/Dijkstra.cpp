@@ -5,24 +5,26 @@ Dijkstra::Dijkstra()
 	finalPath.clear();
 }
 
-bool Dijkstra::CreatePath(Grid& grid, Vector2 start, Vector2 goal)
+bool Dijkstra::CreatePath(Grid& grid, Vector2 start)
 {
 	//reset vectors
 	finalPath.clear();
 
-	openList   = std::vector<GridNode*>();
-	closedList = std::vector<GridNode*>();
+	openList.clear();
+	closedList.clear();
 
 	GridNode* current = grid.GetGridNode(start.x, start.y);
+	current->parent = nullptr;
 
 	openList.push_back(current);
 
-	GridNode* goalNode = grid.GetGridNode(goal.x, goal.y);
+	GridNode* goalNode = grid.goal;
+	goalNode->parent = nullptr;
 
 
 	while (current != nullptr)
 	{
-		if (current != nullptr)
+		//if (current != nullptr)
 		{
 			if (current == goalNode)
 			{
@@ -37,30 +39,34 @@ bool Dijkstra::CreatePath(Grid& grid, Vector2 start, Vector2 goal)
 		for (int i = 0; i < 8; i++)
 		{
 			//if (GetNeighbour(grid, &current, i)) openList.push_back(GetNeighbour(grid, &current, i));
+
+			if (i % 2 != 0) continue;
 		
-			GridNode* neighbour = GetNeighbour(grid, current, i);
+			GridNode* neighbour = GetNeighbour(grid, current, i);		
 
 			if (!neighbour) continue;
+			//if (neighbour == NULL) continue;
 			if (!neighbour->walkable) continue;
 			if (CheckClosedList(neighbour) > -1) continue;
 
-			float dist = current->position.Magnitude();
+			float dist = (neighbour->position - current->position).Magnitude();
 
-			float cost = current->gCost + neighbour->gCost + dist;
+			float cost = current->fCost + neighbour->gCost + dist;
 
 			int openCount = CheckOpenList(neighbour);
 			if (openCount != -1)
 			{
 				if (neighbour->fCost > cost)
 				{
-					openList[openCount]->parent = current;
+					openList[openCount]->parent = current;				
 					openList[openCount]->fCost = cost;
 				}
 			}
 			else
-			{
-				GridNode* newNode = new GridNode(neighbour, current, cost);
-				openList.push_back(newNode);
+			{			
+				neighbour->fCost = cost;
+				neighbour->parent = current;
+				openList.push_back(neighbour);
 			}
 		}
 
@@ -80,36 +86,28 @@ GridNode* Dijkstra::GetNeighbour(Grid& grid, GridNode* current, int dir)
 	switch (dir)
 	{
 	case 0://up
-		newNode = grid.GetGridNode(current->position.x, current->position.y + 1);
-		newNode->parent = current;
+		newNode = grid.GetGridNode(current->position.x, current->position.y + 1);				
 		break;
 	case 1://upright
-		newNode = grid.GetGridNode(current->position.x + 1, current->position.y + 1);
-		newNode->parent = current;
+		newNode = grid.GetGridNode(current->position.x + 1, current->position.y + 1);		
 		break;
 	case 2: // right
 		newNode = grid.GetGridNode(current->position.x + 1, current->position.y);
-		newNode->parent = current;
 		break;
 	case 3: // down right
 		newNode = grid.GetGridNode(current->position.x + 1, current->position.y - 1);
-		newNode->parent = current;
 		break;
 	case 4://down
 		newNode = grid.GetGridNode(current->position.x, current->position.y - 1);
-		newNode->parent = current;
 		break;
 	case 5:// down left
 		newNode = grid.GetGridNode(current->position.x - 1, current->position.y - 1);
-		newNode->parent = current;
 		break;
 	case 6://left
 		newNode = grid.GetGridNode(current->position.x - 1, current->position.y);
-		newNode->parent = current;
 		break;
 	case 7 ://up left
 		newNode = grid.GetGridNode(current->position.x - 1, current->position.y + 1);
-		newNode->parent = current;
 		break;
 	default:
 		break;
@@ -137,11 +135,10 @@ int Dijkstra::CheckOpenList(GridNode* node)
 
 void Dijkstra::SetPath(GridNode* end)
 {
-	GridNode* node = end;
-
+	GridNode* node = end;	
 	while (node)
 	{
-		finalPath.insert(finalPath.begin(), node->position);
+		finalPath.insert(finalPath.begin(), node->position * 20);
 		node = node->parent;
 	}
 }

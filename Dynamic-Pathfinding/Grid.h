@@ -19,6 +19,7 @@ struct GridNode
 	GridNode* node = nullptr;
 
 	bool curentGoal = false;
+	bool inPath = false;
 
 	GridNode()
 	{
@@ -28,9 +29,9 @@ struct GridNode
 		fCost = 0.0f;
 		hCost = 0.0f;
 	};
-	GridNode(GridNode* node, GridNode* _parent, float _cost)
+	GridNode(GridNode* _node, GridNode* _parent, float _cost)
 	{
-		node = node;
+		node = _node;
 		parent = _parent;
 		fCost = _cost;
 	}
@@ -58,5 +59,7 @@ public:
 	bool SaveCurrentGridLayout(std::string name);
 
 	GridNode* goal = NULL;
+
+	Vector2 WorldToGrid(Vector2 pos) { return Vector2(round(pos.x) / 20 , round(pos.y) / 20  ); }
 };
 

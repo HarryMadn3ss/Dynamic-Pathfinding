@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="commons.h" />
     <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="DynamicPathfinding.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="AStar.h" />
     <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="DynamicPathfinding.h" />
     <ClInclude Include="Grid.h" />

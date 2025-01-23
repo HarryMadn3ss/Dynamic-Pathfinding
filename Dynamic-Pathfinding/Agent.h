@@ -6,7 +6,7 @@ class Agent
 {
 private:
 	Vector2 position;
-	float maxSpeed = 1.0f;
+	float maxSpeed;
 protected:
 
 public:
@@ -15,7 +15,7 @@ public:
 	~Agent();
 
 	void RenderAgent(SDL_Renderer* renderer);
-	bool MoveToPosition(Vector2 goal);
+	bool MoveToPosition(Vector2 goal, float dt);
 	Vector2 GetPos() { return position; }
 };
 

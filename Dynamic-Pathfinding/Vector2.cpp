@@ -2,7 +2,7 @@
 
 float Vector2::Magnitude()
 {
-    return sqrt(pow(x, 2) + pow(y, 2));
+    return sqrt(x * x + y * y);
 }
 
 Vector2 Vector2::Normalise()

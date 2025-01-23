@@ -1,15 +1,11 @@
 #include "Agent.h"
 
-Agent::Agent()
-{
-	position = Vector2();
-	maxSpeed = 1.0f;
-}
+Agent::Agent() : Agent(Vector2()) { }
 
 Agent::Agent(Vector2 pos)
 {
 	position = pos;
-	maxSpeed = 1.0f;
+	maxSpeed = 50.0f;
 }
 
 Agent::~Agent()
@@ -23,14 +19,14 @@ void Agent::RenderAgent(SDL_Renderer* renderer)
 	SDL_RenderFillRect(renderer, &fillRect);
 }
 
-bool Agent::MoveToPosition(Vector2 goal)
+bool Agent::MoveToPosition(Vector2 goal, float dt)
 {
-	while (goal != position)
-	{
-		Vector2 dir = goal - position;
-		dir = dir.Normalise();
-		Vector2 velocity = dir * maxSpeed;
-		position = position + velocity;
-	}
-	return true;
+	Vector2 dir = goal - position;
+	float dist = dir.Magnitude();
+	if (dist < 0.01) return true;
+	dir = dir.Normalise();
+	Vector2 velocity = dir * maxSpeed * dt;
+	position = position + velocity;	
+	//position = goal;
+	return false;
 }

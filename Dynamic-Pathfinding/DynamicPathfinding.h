@@ -16,6 +16,7 @@
 class Dijkstra;
 class Vector2;
 class Agent;
+class AStar;
 
 class DynamicPathfinding
 {
@@ -28,6 +29,7 @@ private:
 	Grid* _grid = NULL;
 	Agent* _agent = NULL;
 	Dijkstra* _dijkstra = NULL;
+	AStar* _aStar = NULL;
 
 	//ImGuiContext* _imGuiContext = NULL;
 	bool _imGuiWindow = true;

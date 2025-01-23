@@ -1,9 +1,13 @@
 #include "DynamicPathfinding.h"
 
 #include "Dijkstra.h"
+#include "AStar.h"
 #include "Vector2.h"
 #include "Agent.h"
 
+#include <chrono>
+
+using namespace std::chrono;
 
 bool DynamicPathfinding::Init()
 {
@@ -89,7 +93,7 @@ bool DynamicPathfinding::Init()
 			_grid = new Grid;
 			_agent = new Agent();
 			_dijkstra = new Dijkstra();
-			//_grid->GenerateGrid();
+			_aStar = new AStar();			
 
 			//update surface
 			SDL_UpdateWindowSurface(_window);
@@ -103,6 +107,11 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 {
 	while (!_quit)
 	{
+		static auto last = steady_clock::now();
+		auto old = last;
+		last = steady_clock::now();
+		const duration<float> frameTime = last - old;
+		float deltaTime = frameTime.count();
 
 		//handles events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -140,12 +149,11 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			}
 			if (ImGui::Button("Dijkstra Find Path"))
 			{
-				if (_grid->goal) _dijkstra->CreatePath(*_grid, _agent->GetPos(), _grid->goal->position);
-
-				for (int i = 0; i < _dijkstra->finalPath.size(); i++)
-				{
-					_agent->MoveToPosition(_dijkstra->finalPath[i]);
-				}
+				if (_grid->goal) _dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+			}
+			if (ImGui::Button("ASTAR find Path"))
+			{
+				if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 			}
 			ImGui::End();
 		}
@@ -168,7 +176,38 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		//SDL_SetRenderDrawColor(_renderer, 0xFF, 0x00, 0x00, 0xFF);
 		//SDL_RenderFillRect(_renderer, &fillRect);
 
-		_grid->RenderGrid(_renderer);
+		_grid->RenderGrid(_renderer);	
+
+		// if path.size() > 0
+		// move to next node
+		// remove from path
+		bool reachedNode = false;
+		if(_dijkstra->finalPath.size() > 0)
+		{
+			reachedNode = _agent->MoveToPosition(_dijkstra->finalPath[0], deltaTime);
+			if (reachedNode)
+			{
+				_dijkstra->finalPath.erase(_dijkstra->finalPath.begin());				
+			}
+		}
+		if (_aStar->finalPath.size() > 0)
+		{
+			reachedNode = _agent->MoveToPosition(_aStar->finalPath[0], deltaTime);
+			if (reachedNode)
+			{
+				_aStar->finalPath.erase(_aStar->finalPath.begin());
+			}
+		}
+		//else
+		//{
+		//	if (reachedNode == true)
+		//	{
+		//		GridNode* node = _grid->GetGridNode(_grid->goal->position.x, _grid->goal->position.y);
+		//		node->curentGoal = false;
+		//		_grid->goal = nullptr;
+		//		reachedNode = false;
+		//	}
+		//}
 		_agent->RenderAgent(_renderer);
 
 		//imgui
