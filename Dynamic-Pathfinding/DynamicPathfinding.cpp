@@ -137,6 +137,8 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();		
 
+		static int algIndex = 0;
+
 		if (_imGuiWindow)
 		{
 			ImGui::Begin("Window", &_imGuiWindow);
@@ -146,7 +148,6 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				_grid->SaveCurrentGridLayout(name);
 			}
-			static int algIndex = 0;
 			ImGui::Text("Algorithm Selector");
 			ImGui::Combo("Algorithm", &algIndex, _dropdownOptions, IM_ARRAYSIZE(_dropdownOptions));		
 
@@ -219,7 +220,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		// remove from path
 		bool reachedNode = false;
 
-		switch (_selectedAlgorithm)
+		switch (static_cast<Algorithm>(algIndex))
 		{
 		case DIJKSTRA:
 			if(_dijkstra->finalPath.size() > 0)
@@ -251,10 +252,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					{
 						_aStar->finalPath.clear();
 						_count = 0;						
-					}
-					
-						
-					
+					}				
 				}
 			}
 			break;
