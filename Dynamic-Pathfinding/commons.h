@@ -8,4 +8,9 @@ constexpr int GRID_WIDTH = 32;	//32
 constexpr int GRID_HEIGHT = 24; //24
 
 
-
+enum Algorithm
+{
+	DIJKSTRA = 0,
+	ASTAR,
+	DSTARLITE,
+};

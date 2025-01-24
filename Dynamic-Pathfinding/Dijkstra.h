@@ -1,26 +1,11 @@
 #pragma once
-#include <vector>
 
-#include "Grid.h"
+#include "Pathfinding.h"
 
-class Dijkstra
+class Dijkstra : public Pathfinding
 {
-private:
-
-	std::vector<GridNode*> openList;
-	std::vector<GridNode*> closedList;
-		
-	int CheckClosedList(GridNode* node);
-	int CheckOpenList(GridNode* node);
-	void SetPath(GridNode* end);
-
-	GridNode* GetNeighbour(Grid& grid, GridNode* current, int dir);
 public:
-	Dijkstra();
 
-	std::vector<Vector2> finalPath;
-	bool CreatePath(Grid& grid, Vector2 start);
-	
-	
+	bool CreatePath(Grid& grid, Vector2 start) override;		
 };
 

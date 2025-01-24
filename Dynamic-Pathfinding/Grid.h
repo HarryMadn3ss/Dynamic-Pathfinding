@@ -35,6 +35,8 @@ struct GridNode
 		node = _node;
 		parent = _parent;
 		fCost = _cost;
+		gCost = 0.0f;
+		hCost = 0.0f;
 	}
 };
 
@@ -61,7 +63,8 @@ public:
 
 	GridNode* goal = NULL;
 
-	Vector2 WorldToGrid(Vector2 pos) { return Vector2(round(pos.x) / 20 , round(pos.y) / 20  ); }
+	Vector2 WorldToGrid(Vector2 pos) { return Vector2(static_cast<int>(pos.x) / 20 , static_cast<int>(pos.y) / 20  ); }
 	void ResetGrid();
+	void ResetStepGrid();
 };
 

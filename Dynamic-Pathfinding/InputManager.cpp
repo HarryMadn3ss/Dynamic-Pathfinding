@@ -28,6 +28,9 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 		if (node)
 		{
 			node->walkable = !node->walkable;
+			node->curentGoal = false;
+			node->inPath = false;
+			node->searched = false;
 		}
 		break;
 	case 3: //right

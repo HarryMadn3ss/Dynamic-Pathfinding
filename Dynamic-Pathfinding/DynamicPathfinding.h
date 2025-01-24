@@ -31,6 +31,11 @@ private:
 	Dijkstra* _dijkstra = NULL;
 	AStar* _aStar = NULL;
 
+	Algorithm _selectedAlgorithm = DIJKSTRA;
+	const char* _currentAlg = { "Dijkstra" };
+	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
+	bool _takeStep;
+	int _count = 0;
 	//ImGuiContext* _imGuiContext = NULL;
 	bool _imGuiWindow = true;
 

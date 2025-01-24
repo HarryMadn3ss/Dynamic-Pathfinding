@@ -139,24 +139,58 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 
 		if (_imGuiWindow)
 		{
-			ImGui::Begin("Map Saver", &_imGuiWindow);
-			//ImGui::Text("");
+			ImGui::Begin("Window", &_imGuiWindow);
 			static std::string name;
 			ImGui::InputText("Map Name", &name);
 			if (ImGui::Button("Save"))
 			{
 				_grid->SaveCurrentGridLayout(name);
 			}
-			if (ImGui::Button("Dijkstra Find Path"))
+			static int algIndex = 0;
+			ImGui::Text("Algorithm Selector");
+			ImGui::Combo("Algorithm", &algIndex, _dropdownOptions, IM_ARRAYSIZE(_dropdownOptions));		
+
+			if (ImGui::Button("Find Path"))
 			{
+				_takeStep = false;
 				_grid->ResetGrid();
-				if (_grid->goal) _dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+				switch (static_cast<Algorithm>(algIndex))
+				{
+				case DIJKSTRA:
+					if (_grid->goal) _dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					else printf("Goal Not Set");
+					break;
+				case ASTAR:
+					if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					else printf("Goal Not Set");
+					break;
+				case DSTARLITE:
+					break;
+				default:
+					break;
+				}
 			}
-			if (ImGui::Button("ASTAR find Path"))
+			if (ImGui::Button("Take a Step"))
 			{
-				_grid->ResetGrid();
-				if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+				_takeStep = true;
+				_grid->ResetStepGrid();
+				switch (static_cast<Algorithm>(algIndex))
+				{
+				case DIJKSTRA:
+					if (_grid->goal) _dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					else printf("Goal Not Set");
+					break;
+				case ASTAR:
+					if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					else printf("Goal Not Set");
+					break;
+				case DSTARLITE:
+					break;
+				default:
+					break;
+				}
 			}
+
 			ImGui::End();
 		}
 
@@ -184,32 +218,60 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		// move to next node
 		// remove from path
 		bool reachedNode = false;
-		if(_dijkstra->finalPath.size() > 0)
+
+		switch (_selectedAlgorithm)
 		{
-			reachedNode = _agent->MoveToPosition(_dijkstra->finalPath[0], deltaTime);
-			if (reachedNode)
+		case DIJKSTRA:
+			if(_dijkstra->finalPath.size() > 0)
 			{
-				_dijkstra->finalPath.erase(_dijkstra->finalPath.begin());				
+				reachedNode = _agent->MoveToPosition(_dijkstra->finalPath[0], deltaTime);
+				if (reachedNode)
+				{
+					_dijkstra->finalPath.erase(_dijkstra->finalPath.begin());
+					_count++;
+
+					if (_takeStep && _count > 1)
+					{					
+						_dijkstra->finalPath.clear();
+						_count = 0;						
+					}
+				}								
 			}
-		}
-		if (_aStar->finalPath.size() > 0)
-		{
-			reachedNode = _agent->MoveToPosition(_aStar->finalPath[0], deltaTime);
-			if (reachedNode)
+			break;
+		case ASTAR:
+			if (_aStar->finalPath.size() > 0)
 			{
-				_aStar->finalPath.erase(_aStar->finalPath.begin());
+				reachedNode = _agent->MoveToPosition(_aStar->finalPath[0], deltaTime);
+				if (reachedNode)
+				{
+					_aStar->finalPath.erase(_aStar->finalPath.begin());
+					_count++;
+
+					if (_takeStep && _count > 1)
+					{
+						_aStar->finalPath.clear();
+						_count = 0;						
+					}
+					
+						
+					
+				}
 			}
+			break;
+		case DSTARLITE:
+			break;
+		default:
+			break;
 		}
-		//else
+			
+		//if (reachedNode == true)
 		//{
-		//	if (reachedNode == true)
-		//	{
-		//		GridNode* node = _grid->GetGridNode(_grid->goal->position.x, _grid->goal->position.y);
-		//		node->curentGoal = false;
-		//		_grid->goal = nullptr;
-		//		reachedNode = false;
-		//	}
+		//	GridNode* node = _grid->GetGridNode(_grid->goal->position.x, _grid->goal->position.y);
+		//	node->curentGoal = false;
+		//	_grid->goal = nullptr;
+		//	reachedNode = false;
 		//}
+
 		_agent->RenderAgent(_renderer);
 
 		//imgui

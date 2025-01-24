@@ -168,6 +168,25 @@ void Grid::ResetGrid()
 			grid[j][i].inPath = false;
 			grid[j][i].searched = false;
 			grid[j][i].curentGoal = false;
+			grid[j][i].parent = nullptr;
+			grid[j][i].gCost = 1.0f;
+			grid[j][i].hCost = 0.0f;
+			grid[j][i].fCost = 0.0f;
+		}
+	}
+}
+
+void Grid::ResetStepGrid()
+{
+	for (int i = 0; i < GRID_HEIGHT; i++)
+	{
+		for (int j = 0; j < GRID_WIDTH; j++)
+		{
+			grid[j][i].inPath = false;			
+			grid[j][i].parent = nullptr;
+			grid[j][i].gCost = 1.0f;
+			grid[j][i].hCost = 0.0f;
+			grid[j][i].fCost = 0.0f;
 		}
 	}
 }
