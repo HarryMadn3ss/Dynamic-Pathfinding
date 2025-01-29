@@ -141,6 +141,7 @@
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="commons.h" />
     <ClCompile Include="Dijkstra.cpp" />
+    <ClCompile Include="DStar.cpp" />
     <ClCompile Include="DynamicPathfinding.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Agent.h" />
     <ClInclude Include="AStar.h" />
     <ClInclude Include="Dijkstra.h" />
+    <ClInclude Include="DStar.h" />
     <ClInclude Include="DynamicPathfinding.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="ImageLoader.h" />
