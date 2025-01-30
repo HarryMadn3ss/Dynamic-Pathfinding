@@ -1,8 +1,8 @@
 #include "AStar.h"
 
-float AStar::ManhattenHeuristic(GridNode* current, GridNode* goal)
+float AStar::ManhattenHeuristic(GridNode current, GridNode goal)
 {
-    Vector2 vec = goal->position - current->position;     
+    Vector2 vec = goal.position - current.position;     
     return abs(vec.x) + abs(vec.y);
 }
 
@@ -60,7 +60,7 @@ bool AStar::CreatePath(Grid& grid, Vector2 start)
 
             float dist = (neigbour->position - current->position).Magnitude();
 
-            float tempH = ManhattenHeuristic(neigbour, goal);
+            float tempH = ManhattenHeuristic(*neigbour, *goal);
             float tempG = current->gCost + neigbour->gCost + dist;
             float tempF = tempG + tempH;
 

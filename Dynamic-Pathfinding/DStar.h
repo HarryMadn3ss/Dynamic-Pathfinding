@@ -1,24 +1,14 @@
 #pragma once
 
+#include "Pathfinding.h"
 
-class state
-{
-private:
-
-protected:
-
-public:
-
-};
-
-
-class DStar
+class DStar : public Pathfinding
 {
 private: 
+	float ManhattenHueristic(GridNode current, GridNode goal);
 
-protected:
 
 public:
-
+	bool CreatePath(Grid& grid, Vector2 start) override;
 };
 

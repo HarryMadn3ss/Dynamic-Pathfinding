@@ -59,8 +59,13 @@ void Grid::GenerateGrid()
 			if (j % 2 == 0)
 			{
 				grid[j][i].walkable = 1;
+				grid[j][i].gCost = 1;
 			}
-			else grid[j][i].walkable = 0;
+			else
+			{
+				grid[j][i].walkable = 0;
+				grid[j][i].gCost = std::numeric_limits<float>::infinity();
+			}
 		}
 	}
 }

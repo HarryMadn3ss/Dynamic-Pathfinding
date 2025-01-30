@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <iostream>
+#include <chrono>
 
 #include "commons.h"
 #include "InputManager.h"
@@ -30,6 +31,9 @@ private:
 	Agent* _agent = NULL;
 	Dijkstra* _dijkstra = NULL;
 	AStar* _aStar = NULL;
+
+	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
+	float _timeTaken;
 
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };

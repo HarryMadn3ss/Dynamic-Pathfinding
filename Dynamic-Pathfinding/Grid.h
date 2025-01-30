@@ -13,7 +13,7 @@ struct GridNode
 {
 	Vector2 position;
 	bool walkable = false;
-	float gCost, hCost, fCost;
+	float gCost, hCost, fCost, rhsCost;
 
 	GridNode* parent = nullptr;
 	GridNode* node = nullptr;
@@ -37,6 +37,11 @@ struct GridNode
 		fCost = _cost;
 		gCost = 0.0f;
 		hCost = 0.0f;
+	}
+
+	bool IsConsistant() const
+	{
+		return gCost == rhsCost;
 	}
 };
 
@@ -66,5 +71,7 @@ public:
 	Vector2 WorldToGrid(Vector2 pos) { return Vector2(static_cast<int>(pos.x) / 20 , static_cast<int>(pos.y) / 20  ); }
 	void ResetGrid();
 	void ResetStepGrid();
+
+
 };
 
