@@ -43,11 +43,12 @@ Grid::Grid()
 			}
 		}
 	}
+	myFile.close();
 }
 
 Grid::~Grid()
 {
-	delete[] grid;
+	if(myFile.is_open()) myFile.close();	
 }
 
 void Grid::GenerateGrid()
@@ -92,6 +93,7 @@ void Grid::ReGenerateGrid(std::string path)
 			}
 		}
 	}
+	myFile.close();
 }
 
 void Grid::RenderGrid(SDL_Renderer* renderer)

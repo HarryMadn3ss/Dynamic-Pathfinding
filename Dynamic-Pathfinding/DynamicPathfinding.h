@@ -18,6 +18,7 @@ class Dijkstra;
 class Vector2;
 class Agent;
 class AStar;
+class DStar;
 
 class DynamicPathfinding
 {
@@ -31,9 +32,10 @@ private:
 	Agent* _agent = NULL;
 	Dijkstra* _dijkstra = NULL;
 	AStar* _aStar = NULL;
+	DStar* _dStar = NULL;
 
 	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
-	float _timeTaken;
+    float _timeTaken;
 
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };

@@ -1,5 +1,5 @@
 #pragma once
-
+#include<limits>
 
 constexpr int SCREEN_WIDTH = 1000;
 constexpr int SCREEN_HEIGHT = 500;

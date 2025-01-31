@@ -13,7 +13,10 @@ struct GridNode
 {
 	Vector2 position;
 	bool walkable = false;
-	float gCost, hCost, fCost, rhsCost;
+	float gCost, hCost, fCost;
+	
+	//TODO break out into two diffent structs this is getting messy
+	float rhsCost, dStarGCost;
 
 	GridNode* parent = nullptr;
 	GridNode* node = nullptr;
@@ -29,6 +32,8 @@ struct GridNode
 		gCost = 0.0f;
 		fCost = 0.0f;
 		hCost = 0.0f;
+		rhsCost = std::numeric_limits<float>::infinity();
+		dStarGCost = -1.0f;
 	};
 	GridNode(GridNode* _node, GridNode* _parent, float _cost)
 	{
@@ -37,6 +42,9 @@ struct GridNode
 		fCost = _cost;
 		gCost = 0.0f;
 		hCost = 0.0f;
+		if (node->walkable) rhsCost = 0.0f;
+		else rhsCost = std::numeric_limits<float>::infinity();
+		dStarGCost = -1.0f;
 	}
 
 	bool IsConsistant() const

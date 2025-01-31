@@ -28,6 +28,8 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 		if (node)
 		{
 			node->walkable = !node->walkable;
+			if (!node->walkable) node->rhsCost = std::numeric_limits<float>::infinity();
+			else node->rhsCost = 0.0f;
 			node->curentGoal = false;
 			node->inPath = false;
 			node->searched = false;

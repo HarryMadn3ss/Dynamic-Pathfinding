@@ -12,7 +12,7 @@ protected:
 
 	int CheckOpenList(GridNode* node);
 	int CheckClosedList(GridNode* node);
-	void SetPath(GridNode* node);
+	virtual void SetPath(GridNode* node);
 	GridNode* GetNeighbour(Grid& grid, GridNode* current, int dir);
 public:
 	Pathfinding();

@@ -4,6 +4,7 @@
 #include "AStar.h"
 #include "Vector2.h"
 #include "Agent.h"
+#include "DStar.h"
 
 #include <chrono>
 
@@ -93,7 +94,8 @@ bool DynamicPathfinding::Init()
 			_grid = new Grid;
 			_agent = new Agent();
 			_dijkstra = new Dijkstra();
-			_aStar = new AStar();			
+			_aStar = new AStar();	
+			_dStar = new DStar();
 
 			//update surface
 			SDL_UpdateWindowSurface(_window);
@@ -164,15 +166,26 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 						_clockStart = std::chrono::system_clock::now();
 						_dijkstra->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 						_clockEnd = std::chrono::system_clock::now();
-						_timeTaken = duration_cast<duration<float>>(_clockEnd - _clockStart).count();
 					}
 					else printf("Goal Not Set");
 					break;
 				case ASTAR:
-					if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					if (_grid->goal)
+					{
+						_clockStart = std::chrono::system_clock::now();
+						_aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+						_clockEnd = std::chrono::system_clock::now();
+					}
 					else printf("Goal Not Set");
 					break;
 				case DSTARLITE:
+					if (_grid->goal)
+					{
+						_clockStart = std::chrono::system_clock::now();
+						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()), Vector2().Infinate());
+						_clockEnd = std::chrono::system_clock::now();
+					}
+					else printf("Goal Not Set");
 					break;
 				default:
 					break;
@@ -194,17 +207,30 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					else printf("Goal Not Set");
 					break;
 				case ASTAR:
-					if (_grid->goal) _aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+					if (_grid->goal)
+					{
+						_clockStart = std::chrono::system_clock::now();
+						_aStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+						_clockEnd = std::chrono::system_clock::now();
+					}
 					else printf("Goal Not Set");
 					break;
 				case DSTARLITE:
+					if (_grid->goal)
+					{
+						_clockStart = std::chrono::system_clock::now();
+						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+						_clockEnd = std::chrono::system_clock::now();
+					}
+					else printf("Goal Not Set");
 					break;
 				default:
 					break;
 				}
 			}
 
-			ImGui::Text("Time Taken: \n%d ms", _timeTaken);
+			_timeTaken = duration_cast<duration<float>>(_clockEnd - _clockStart).count();
+			ImGui::Text("Time Taken: \n%f ms", (_timeTaken/60) * 1000);
 
 			ImGui::End();
 		}
@@ -271,6 +297,24 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			}
 			break;
 		case DSTARLITE:
+			if (_dStar->finalPath.size() > 0)
+			{
+				if (_dStar->MoveForward(*_grid, *_agent))
+				{
+					reachedNode = _agent->MoveToPosition(_dStar->finalPath[_dStar->finalPath.size() - 1], deltaTime);
+					if (reachedNode)
+					{
+						_dStar->finalPath.pop_back();
+						_count++;
+
+						if (_takeStep && _count > 1)
+						{
+							_dStar->finalPath.clear();
+							_count = 0;
+						}
+					}
+				}				
+			}
 			break;
 		default:
 			break;
@@ -312,6 +356,8 @@ void DynamicPathfinding::Close()
 	_dijkstra  = nullptr;
 	delete _aStar;
 	_aStar     = nullptr;
+	delete _dStar;
+	_dStar = nullptr;
 
 	//destroy window
 	SDL_DestroyRenderer(_renderer);
