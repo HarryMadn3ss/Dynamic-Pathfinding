@@ -182,7 +182,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					if (_grid->goal)
 					{
 						_clockStart = std::chrono::system_clock::now();
-						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()), Vector2().Infinate());
+						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 						_clockEnd = std::chrono::system_clock::now();
 					}
 					else printf("Goal Not Set");

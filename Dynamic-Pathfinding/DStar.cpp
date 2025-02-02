@@ -1,5 +1,25 @@
 #include "DStar.h"
 
+int DStar::CheckChangedNeighbours(GridNode* node)
+{
+    for (int i = 0; i < neighboursVec.size(); i++)
+    {
+        if (neighboursVec[i] == node) return i;
+    }
+    return -1;
+}
+
+void DStar::AmmendPath(GridNode* node)
+{
+    GridNode* cur = node;
+    while (node)
+    {
+        finalPath.push_back(node->position * 20);
+        node->inPath = true;
+        node = node->parent;
+    }
+}
+
 float DStar::ManhattenHueristic(GridNode current, GridNode goal)
 {
 	Vector2 vec = goal.position - current.position;
@@ -19,6 +39,11 @@ GridNode* DStar::GetCheapestNode()
 
 bool DStar::CheckConsistency(GridNode& node)
 {    
+    //if (node == nullptr)
+    //{
+    //    printf("node was null");
+    //    return true;
+    //}
     return node.gCost == node.rhsCost;
 }
 
@@ -108,52 +133,68 @@ bool DStar::CreatePath(Grid& grid, Vector2 start)
         else current = nullptr;
     }
     return false;
-
-    return false;
 }
 
-bool DStar::CreatePath(Grid& grid, Vector2 start, Vector2 _goal)
+bool DStar::RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal)
 {
-	//D*Lite works backwards
-    GridNode* current = nullptr;
+    //dont clear finalPath just need to update it
+    openList.clear();
+    closedList.clear();
+    //new vector for the neighbours to check againest // could be array but not garunteered to be 8 viable nodes
+    neighboursVec.clear();
 
-    if (_goal == Vector2(std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity()))
-    {
-        current = grid.goal;
-    }
-    else current = grid.GetGridNode(_goal.x, _goal.y);
-
+    //new goal is node after the changed node
+    GridNode* current = grid.GetGridNode(_goal.x / 20, _goal.y / 20);
     current->gCost = 0.0f;
     current->rhsCost = 0.0f;
-	current->parent = nullptr;
+	//current->parent = nullptr;
 
 	openList.push_back(current);
 
-	GridNode* goal = grid.GetGridNode(start.x, start.y);
-	goal->parent = nullptr;
+    GridNode* goal = grid.GetGridNode(start.x / 20, start.y / 20);
+    goal->gCost = 0.0f;
+    goal->rhsCost = 0.0f;
+    goal->parent = nullptr;
+
+
+    //need to add changed nodes to the open list and construct a new path
+    GridNode* changedNode = grid.GetGridNode(finalPath[finalPath.size() - 1].x / 20, finalPath[finalPath.size() - 1].y / 20);
+    for (int i = 0; i < 8; i++)
+    {
+        GridNode* neighbour = GetNeighbour(grid, changedNode, i);
+        neighbour->parent = nullptr;
+
+        int closedCount = CheckClosedList(neighbour);
+        if (!neighbour || !neighbour->walkable || closedCount != -1) continue;
+        //stop cutting corners
+        int j = i;
+        i == 7 ? j = -1 : j = i;
+        GridNode* right = GetNeighbour(grid, changedNode, j + 1);
+        GridNode* left = GetNeighbour(grid, changedNode, i - 1);
+        if (i % 2 != 0) if (left && left->walkable == false || right && right->walkable == false) continue;
+        
+        neighboursVec.push_back(neighbour);
+    }    
+
+
 
 	while (current)
 	{
 		if (current == goal) 
 		{
-			SetPath(current);
+			//manually set the path up connected disjointed nodes
+            AmmendPath(current);
 			return true;
 		}
 
+        //go through each neighbour check if they exist in the changed neighbours 
+
 		for (int i = 0; i < 8; i++)
 		{
-			GridNode* neighbour = GetNeighbour(grid, current, i);
-
-            int closedCount = CheckClosedList(neighbour);
-            if (!neighbour || !neighbour->walkable || closedCount != -1) continue;
-
-            //stop cutting corners
-            int j = i;
-            i == 7 ? j = -1 : j = i;
-            GridNode* right = GetNeighbour(grid, current, j + 1);
-            GridNode* left = GetNeighbour(grid, current, i - 1);
-
-            if (i % 2 != 0) if (left && left->walkable == false || right && right->walkable == false) continue;
+            GridNode* neighbour = GetNeighbour(grid, changedNode, i);
+            neighbour->parent = nullptr;
+   
+            if (!CheckChangedNeighbours(neighbour)) continue;            
 
             float dist = (neighbour->position - current->position).Magnitude();
 
@@ -192,15 +233,19 @@ bool DStar::CreatePath(Grid& grid, Vector2 start, Vector2 _goal)
         if (openList.size() > 0) current = GetCheapestNode();
         else current = nullptr;
     }
-	return false;
+    //if path is completely blocked search for new one
+	return CreatePath(grid, start);
 }
 
 bool DStar::MoveForward(Grid& grid, Agent& agent)
 {
     //if node infront is locally incosistant the goal is now set to inconsistant's parent and the start is the current 
-    if (!CheckConsistency(*grid.GetGridNode(finalPath[finalPath.size() - 1].x, finalPath[finalPath.size() - 1].y)))
+    if (!CheckConsistency(*grid.GetGridNode(finalPath[finalPath.size() - 1].x / 20, finalPath[finalPath.size() - 1].y / 20)))
     {
-        CreatePath(grid, agent.GetPos(), Vector2(finalPath[finalPath.size() - 2].x, finalPath[finalPath.size() - 2].y));
+        printf("nodes are inconsistant");
+        //finalPath.erase(finalPath.end() - 1);
+        //finalPath.push_back(Vector2(agent.GetPos().x, agent.GetPos().y));
+        RecalculatePath(grid, agent.GetPos(), Vector2(finalPath[finalPath.size() - 2].x, finalPath[finalPath.size() - 2].y));
     }
     
     return true;
