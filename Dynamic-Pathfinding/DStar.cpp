@@ -42,11 +42,6 @@ GridNode* DStar::GetCheapestNode()
 
 bool DStar::CheckConsistency(GridNode& node)
 {    
-    //if (node == nullptr)
-    //{
-    //    printf("node was null");
-    //    return true;
-    //}
     return node.gCost == node.rhsCost;
 }
 
@@ -275,6 +270,7 @@ bool DStar::MoveForward(Grid& grid, Agent& agent)
         {
             bool check = RecalculatePath(grid, agent.GetPos(), Vector2(finalPath[finalPath.size() - 2].x, finalPath[finalPath.size() - 2].y));
             //if path is completely blocked search for new one
+            //might be able to check if new path has openned based on a change but would only count if the whole grid is scanned first like how D* does it
             if (!check) CreatePath(grid, agent.GetPos());
         }
         else
