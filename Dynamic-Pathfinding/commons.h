@@ -14,3 +14,4 @@ enum Algorithm
 	ASTAR,
 	DSTARLITE,
 };
+

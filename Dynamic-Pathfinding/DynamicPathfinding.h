@@ -36,7 +36,7 @@ private:
 
 	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
     float _timeTaken;
-
+	bool isStopped = false;
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
 	bool _takeStep;

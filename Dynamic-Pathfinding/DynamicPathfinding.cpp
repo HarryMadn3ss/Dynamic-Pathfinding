@@ -29,32 +29,6 @@ bool DynamicPathfinding::Init()
 		}
 		else
 		{
-
-			////////////////////////////////////////////////////////////////////////////////////PNG Loading/////////////////////////////////////////////////////////////////////////////
-			//int imgFlags = IMG_INIT_PNG;
-			//if (!(IMG_Init(imgFlags) & imgFlags))
-			//{
-			//	printf("PNG faild to Initialize! SDL_image Error: %s\n", IMG_GetError());
-			//	success = false;
-			//}
-			//else
-			//{
-			//	//get window surface 
-			//	gScreenSurface = SDL_GetWindowSurface(gWindow);
-
-			//	SDL_Surface* imageToLoad = LoadSurface("Images/Panda.png");
-
-			//	//to apply the stretch image
-			//	SDL_Rect stretchRect;
-			//	stretchRect.x = 0; //to make the size of screen pass in the screen dimensions
-			//	stretchRect.y = 0;
-			//	stretchRect.w = SCREEN_WIDTH;
-			//	stretchRect.h = SCREEN_HEIGHT;
-			//	SDL_BlitScaled(imageToLoad, NULL, gScreenSurface, &stretchRect);
-			//	//fill surface with color
-			//	//SDL_FillRect(gScreenSurface, NULL, SDL_MapRGB(gScreenSurface->format, 0xFF, 0xFF, 0xFF));
-			//}			
-
 			///////////////////////////////////////////////////////////////////////////////////Texture Loading//////////////////////////////////////////////////////////////////////////
 			//create renderer
 			_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
@@ -74,11 +48,6 @@ bool DynamicPathfinding::Init()
 				{
 					printf("PNG loader failed to Initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
-				}
-				else
-				{
-					//gTexture = LoadTexture("Images/pika.png");
-					// 
 				}
 			}
 
@@ -228,6 +197,10 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					break;
 				}
 			}
+			if (ImGui::Button("Stop"))
+			{
+				isStopped = !isStopped;
+			}
 
 			_timeTaken = duration_cast<duration<float>>(_clockEnd - _clockStart).count();
 			ImGui::Text("Time Taken: \n%f ms", (_timeTaken/60) * 1000);
@@ -235,99 +208,80 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			ImGui::End();
 		}
 
-		////blist = back buffer
-		//SDL_BlitSurface(gImageToLoad, NULL, gScreenSurface, NULL);
-		////switch buffers
-		//SDL_UpdateWindowSurface(gWindow);
+
 
 		//clear Screen
 		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0xFF);
 		//doesnt clear paints over with the old colour
 		SDL_RenderClear(_renderer);
 
-		//render texture to screen
-		//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
-
-		//render red quad
-		//SDL_Rect fillRect = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-		//SDL_SetRenderDrawColor(_renderer, 0xFF, 0x00, 0x00, 0xFF);
-		//SDL_RenderFillRect(_renderer, &fillRect);
-
 		_grid->RenderGrid(_renderer);	
 
-		// if path.size() > 0
-		// move to next node
-		// remove from path
 		bool reachedNode = false;
 
-		switch (static_cast<Algorithm>(algIndex))
+		if (!isStopped)
 		{
-		case DIJKSTRA:
-			if(_dijkstra->finalPath.size() > 0)
+			switch (static_cast<Algorithm>(algIndex))
 			{
-				reachedNode = _agent->MoveToPosition(_dijkstra->finalPath[0], deltaTime);
-				if (reachedNode)
+			case DIJKSTRA:
+				if (_dijkstra->finalPath.size() > 0)
 				{
-					_dijkstra->finalPath.erase(_dijkstra->finalPath.begin());
-					_count++;
-
-					if (_takeStep && _count > 1)
-					{					
-						_dijkstra->finalPath.clear();
-						_count = 0;						
-					}
-				}								
-			}
-			break;
-		case ASTAR:
-			if (_aStar->finalPath.size() > 0)
-			{
-				reachedNode = _agent->MoveToPosition(_aStar->finalPath[0], deltaTime);
-				if (reachedNode)
-				{
-					_aStar->finalPath.erase(_aStar->finalPath.begin());
-					_count++;
-
-					if (_takeStep && _count > 1)
-					{
-						_aStar->finalPath.clear();
-						_count = 0;						
-					}				
-				}
-			}
-			break;
-		case DSTARLITE:
-			if (_dStar->finalPath.size() > 0)
-			{
-				if (_dStar->MoveForward(*_grid, *_agent))
-				{
-					if (_dStar->finalPath.size() == 0) break;
-					reachedNode = _agent->MoveToPosition(_dStar->finalPath[_dStar->finalPath.size() - 1], deltaTime);
+					reachedNode = _agent->MoveToPosition(_dijkstra->finalPath[0], deltaTime);
 					if (reachedNode)
 					{
-						_dStar->finalPath.pop_back();
+						_dijkstra->finalPath.erase(_dijkstra->finalPath.begin());
 						_count++;
 
 						if (_takeStep && _count > 1)
 						{
-							_dStar->finalPath.clear();
+							_dijkstra->finalPath.clear();
 							_count = 0;
 						}
 					}
-				}				
+				}
+				break;
+			case ASTAR:
+				if (_aStar->finalPath.size() > 0)
+				{
+					reachedNode = _agent->MoveToPosition(_aStar->finalPath[0], deltaTime);
+					if (reachedNode)
+					{
+						_aStar->finalPath.erase(_aStar->finalPath.begin());
+						_count++;
+
+						if (_takeStep && _count > 1)
+						{
+							_aStar->finalPath.clear();
+							_count = 0;
+						}
+					}
+				}
+				break;
+			case DSTARLITE:
+				if (_dStar->finalPath.size() > 0)
+				{
+					if (_dStar->MoveForward(*_grid, *_agent))
+					{
+						if (_dStar->finalPath.size() == 0) break;
+						reachedNode = _agent->MoveToPosition(_dStar->finalPath[_dStar->finalPath.size() - 1], deltaTime);
+						if (reachedNode)
+						{
+							_dStar->finalPath.pop_back();
+							_count++;
+
+							if (_takeStep && _count > 1)
+							{
+								_dStar->finalPath.clear();
+								_count = 0;
+							}
+						}
+					}
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
 		}
-			
-		//if (reachedNode == true)
-		//{
-		//	GridNode* node = _grid->GetGridNode(_grid->goal->position.x, _grid->goal->position.y);
-		//	node->curentGoal = false;
-		//	_grid->goal = nullptr;
-		//	reachedNode = false;
-		//}
 
 		_agent->RenderAgent(_renderer);
 
