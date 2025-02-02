@@ -25,7 +25,7 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 	case 1: // left
 		//get the grid node its closest to
 		node =  grid->GetGridNode(round(x) / 20, round(y) / 20);
-		if (node)
+		if (node && !node->curentGoal)
 		{
 			node->walkable = !node->walkable;
 			if (!node->walkable) node->rhsCost = std::numeric_limits<float>::infinity();
@@ -37,13 +37,13 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 		break;
 	case 3: //right
 		node = grid->GetGridNode(round(x) / 20, round(y) / 20);
-		if (node != grid->goal)
+		if (node && node != grid->goal)
 		{
 			node->curentGoal = true;
 			node->walkable = true;
 			grid->goal = node;
 		}
-		else if(node == grid->goal)
+		else if(node && node == grid->goal)
 		{
 			node->curentGoal = false;
 			grid->goal = nullptr;

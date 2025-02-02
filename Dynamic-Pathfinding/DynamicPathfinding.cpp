@@ -301,6 +301,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				if (_dStar->MoveForward(*_grid, *_agent))
 				{
+					if (_dStar->finalPath.size() == 0) break;
 					reachedNode = _agent->MoveToPosition(_dStar->finalPath[_dStar->finalPath.size() - 1], deltaTime);
 					if (reachedNode)
 					{

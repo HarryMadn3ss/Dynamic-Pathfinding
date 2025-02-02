@@ -72,7 +72,7 @@ bool DStar::CreatePath(Grid& grid, Vector2 start)
 
     openList.push_back(current);
 
-    GridNode* goal = grid.GetGridNode(start.x, start.y);
+    GridNode* goal = grid.GetGridNode(start.x / 20, start.y / 20);
     if (!goal)
     {
         printf("Goal is missing");
@@ -270,10 +270,18 @@ bool DStar::MoveForward(Grid& grid, Agent& agent)
     //if node infront is locally incosistant the goal is now set to inconsistant's parent and the start is the current 
     if (!CheckConsistency(*grid.GetGridNode(finalPath[finalPath.size() - 1].x / 20, finalPath[finalPath.size() - 1].y / 20)))
     {        
-        printf("nodes are inconsistant");
-        bool check = RecalculatePath(grid, agent.GetPos(), Vector2(finalPath[finalPath.size() - 2].x, finalPath[finalPath.size() - 2].y));        
-        //if path is completely blocked search for new one
-        if (!check) CreatePath(grid, agent.GetPos());
+        printf("nodes are inconsistant\n");
+        if (finalPath.size() > 1)
+        {
+            bool check = RecalculatePath(grid, agent.GetPos(), Vector2(finalPath[finalPath.size() - 2].x, finalPath[finalPath.size() - 2].y));
+            //if path is completely blocked search for new one
+            if (!check) CreatePath(grid, agent.GetPos());
+        }
+        else
+        {
+            printf("Goal Gone Panic!!!\n");
+            finalPath.clear();
+        }
     }
     
     return true;
