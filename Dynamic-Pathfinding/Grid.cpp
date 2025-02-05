@@ -13,7 +13,7 @@ Grid::Grid()
 	//		else grid[j][i] = 0;
 	//	}
 	//}
-	std::string path = "maps/TestMap.txt";
+	std::string path = "maps/Empty.txt";
 	myFile.open(path);
 	if (!myFile.good()) printf("Map file failed to open: path: %s\n", path);
 	else
