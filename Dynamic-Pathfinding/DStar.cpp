@@ -67,7 +67,7 @@ bool DStar::CreatePath(Grid& grid, Vector2 start)
 
     openList.push_back(current);
 
-    GridNode* goal = grid.GetGridNode(start.x / 20, start.y / 20);
+    GridNode* goal = grid.GetGridNode(start.x, start.y);
     if (!goal)
     {
         printf("Goal is missing");

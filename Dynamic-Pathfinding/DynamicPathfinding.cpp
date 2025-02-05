@@ -151,6 +151,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					if (_grid->goal)
 					{
 						_clockStart = std::chrono::system_clock::now();
+						printf("Player Pos: %f", _agent->GetPos().x);
 						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 						_clockEnd = std::chrono::system_clock::now();
 					}
