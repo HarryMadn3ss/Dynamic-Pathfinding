@@ -34,9 +34,11 @@ private:
 	AStar* _aStar = NULL;
 	DStar* _dStar = NULL;
 
+	const char* _mapPaths[5] = { "maps/MazeOne.txt", "maps/MazeTwo.txt", "maps/Decadence.txt", "maps/NoTalk.txt", "maps/Metro.txt" };
+
 	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
     float _timeTaken;
-	bool isStopped = false;
+	bool isStopped = true;
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
 	bool _takeStep;

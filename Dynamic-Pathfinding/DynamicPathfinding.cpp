@@ -97,7 +97,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				_quit = InputManager::HandleKeyInput(&e);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				InputManager::HandleMouseClick(&e, _grid);
+				InputManager::HandleMouseClick(&e, _grid, *_agent);
 			default:
 				break;
 			}
@@ -109,6 +109,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		ImGui::NewFrame();		
 
 		static int algIndex = 0;
+		static int mapIndex = 0;
 
 		if (_imGuiWindow)
 		{
@@ -119,6 +120,13 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				_grid->SaveCurrentGridLayout(name);
 			}
+			ImGui::Text("Load Map");
+			ImGui::Combo("Map", &mapIndex, _mapPaths, IM_ARRAYSIZE(_mapPaths));
+			if (ImGui::Button("Import Map"))
+			{
+				_grid->ReGenerateGrid(_mapPaths[mapIndex]);
+			}
+
 			ImGui::Text("Algorithm Selector");
 			ImGui::Combo("Algorithm", &algIndex, _dropdownOptions, IM_ARRAYSIZE(_dropdownOptions));		
 

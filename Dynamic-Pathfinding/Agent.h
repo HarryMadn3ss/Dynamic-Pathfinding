@@ -17,5 +17,6 @@ public:
 	void RenderAgent(SDL_Renderer* renderer);
 	bool MoveToPosition(Vector2 goal, float dt);
 	Vector2 GetPos() { return position; }
+	void SetPos(Vector2 pos) { position = pos; }
 };
 

@@ -14,7 +14,7 @@ bool InputManager::HandleKeyInput(SDL_Event* e)
 	return false;
 }
 
-void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
+void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent)
 {
 	//mouse pos
 	int x, y;
@@ -34,6 +34,9 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid)
 			node->inPath = false;
 			node->searched = false;
 		}
+		break;
+	case 2:
+		agent.SetPos(Vector2(x, y));
 		break;
 	case 3: //right
 		node = grid->GetGridNode(round(x) / 20, round(y) / 20);
