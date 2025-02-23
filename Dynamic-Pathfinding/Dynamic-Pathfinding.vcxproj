@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>${SolutionDir)\Dynamic-Pathfinding\Includes\imgui;${SolutionDir)\Dynamic-Pathfinding\Includes\x64;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\hwatt\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\x64;C:\Users\w016075m\Documents\GitHub\Dynamic-Pathfinding\Dynamic-Pathfinding\Includes\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dynamic-Pathfinding\Includes\include;$(SolutionDir)Dynamic-Pathfinding\Includes\imgui;$(SolutionDir)Dynamic-Pathfinding\Includes\x64;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dynamic-Pathfinding\Includes\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
