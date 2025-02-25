@@ -124,6 +124,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			ImGui::Combo("Map", &mapIndex, _mapPaths, IM_ARRAYSIZE(_mapPaths));
 			if (ImGui::Button("Import Map"))
 			{
+				_grid->ResetGrid();
 				_grid->ReGenerateGrid(_mapPaths[mapIndex]);
 			}
 
@@ -210,6 +211,10 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			if (ImGui::Button("Stop"))
 			{
 				isStopped = !isStopped;
+			}
+			if (ImGui::Button("Reset Path"))
+			{
+				_grid->ResetGrid();
 			}
 
 			_timeTaken = duration_cast<duration<float>>(_clockEnd - _clockStart).count();
