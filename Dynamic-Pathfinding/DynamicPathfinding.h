@@ -39,9 +39,11 @@ private:
 
 	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
     float _timeTaken;
-	bool isStopped = true;
+	bool isStopped = false;
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
+	int _algIndex = 0;
+	Vector2 _nextNode = Vector2();
 	bool _takeStep;
 	int _count = 0;
 	//ImGuiContext* _imGuiContext = NULL;

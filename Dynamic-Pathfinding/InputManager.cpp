@@ -14,7 +14,7 @@ bool InputManager::HandleKeyInput(SDL_Event* e)
 	return false;
 }
 
-void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent)
+void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent, Vector2 nextNode)
 {
 	//mouse pos
 	int x, y;
@@ -25,6 +25,7 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent)
 	case 1: // left
 		//get the grid node its closest to
 		node =  grid->GetGridNode(round(x) / 20, round(y) / 20);
+		if (node == grid->GetGridNode(nextNode.x, nextNode.y)) return;
 		if (node && !node->curentGoal)
 		{
 			node->walkable = !node->walkable;

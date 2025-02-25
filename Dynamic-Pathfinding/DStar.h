@@ -17,6 +17,8 @@ private:
 	//void SetPath(GridNode* end) override;
 	bool CheckConsistency(GridNode& node);
 	float GetTravelCost(int dir);
+
+	int count = 0;
 public:
 	bool CreatePath(Grid& grid, Vector2 start);
 	bool RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal);

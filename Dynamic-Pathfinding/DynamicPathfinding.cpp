@@ -96,8 +96,8 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			case SDL_KEYDOWN:
 				_quit = InputManager::HandleKeyInput(&e);
 				break;
-			case SDL_MOUSEBUTTONDOWN:
-				InputManager::HandleMouseClick(&e, _grid, *_agent);
+			case SDL_MOUSEBUTTONDOWN:			
+				InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode);
 			default:
 				break;
 			}
@@ -108,7 +108,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();		
 
-		static int algIndex = 0;
+		
 		static int mapIndex = 0;
 
 		if (_imGuiWindow)
@@ -128,13 +128,13 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			}
 
 			ImGui::Text("Algorithm Selector");
-			ImGui::Combo("Algorithm", &algIndex, _dropdownOptions, IM_ARRAYSIZE(_dropdownOptions));		
+			ImGui::Combo("Algorithm", &_algIndex, _dropdownOptions, IM_ARRAYSIZE(_dropdownOptions));		
 
 			if (ImGui::Button("Find Path"))
 			{
 				_takeStep = false;
 				_grid->ResetGrid();
-				switch (static_cast<Algorithm>(algIndex))
+				switch (static_cast<Algorithm>(_algIndex))
 				{
 				case DIJKSTRA:
 					if (_grid->goal)
@@ -160,7 +160,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					{
 						_clockStart = std::chrono::system_clock::now();
 						printf("Player Pos: %f", _agent->GetPos().x);
-						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
+						_dStar->CreatePath(*_grid, _agent->GetPos());
 						_clockEnd = std::chrono::system_clock::now();
 					}
 					else printf("Goal Not Set");
@@ -173,7 +173,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				_takeStep = true;
 				_grid->ResetStepGrid();
-				switch (static_cast<Algorithm>(algIndex))
+				switch (static_cast<Algorithm>(_algIndex))
 				{
 				case DIJKSTRA:
 					if (_grid->goal)
@@ -199,6 +199,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 						_clockStart = std::chrono::system_clock::now();
 						_dStar->CreatePath(*_grid, _grid->WorldToGrid(_agent->GetPos()));
 						_clockEnd = std::chrono::system_clock::now();
+						_nextNode = _dStar->finalPath[_dStar->finalPath.size() - 1];
 					}
 					else printf("Goal Not Set");
 					break;
@@ -230,7 +231,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 
 		if (!isStopped)
 		{
-			switch (static_cast<Algorithm>(algIndex))
+			switch (static_cast<Algorithm>(_algIndex))
 			{
 			case DIJKSTRA:
 				if (_dijkstra->finalPath.size() > 0)
@@ -271,12 +272,20 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				{
 					if (_dStar->MoveForward(*_grid, *_agent))
 					{
-						if (_dStar->finalPath.size() == 0) break;
+						if (_dStar->finalPath.size() == 0)
+						{
+							_nextNode = Vector2();
+							break;
+						}
+
 						reachedNode = _agent->MoveToPosition(_dStar->finalPath[_dStar->finalPath.size() - 1], deltaTime);
 						if (reachedNode)
 						{
 							_dStar->finalPath.pop_back();
 							_count++;
+
+							if (_dStar->finalPath.size() > 1)
+								_nextNode = _dStar->finalPath[_dStar->finalPath.size() - 2];
 
 							if (_takeStep && _count > 1)
 							{
