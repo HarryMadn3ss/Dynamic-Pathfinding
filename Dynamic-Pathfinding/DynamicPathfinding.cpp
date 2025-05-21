@@ -95,12 +95,11 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				break;
 			case SDL_KEYDOWN:
 				_quit = InputManager::HandleKeyInput(&e);
-				break;
-			case SDL_MOUSEBUTTONDOWN:			
-				InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode);
+				break;				
 			default:
 				break;
-			}
+			}			
+			InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode);		
 		}
 
 		//imgui frame
@@ -208,9 +207,13 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					break;
 				}
 			}
-			if (ImGui::Button("Stop"))
+			static const char* stopButtonTxt = "Stop";
+			if (ImGui::Button(stopButtonTxt))
 			{
 				isStopped = !isStopped;
+				if (stopButtonTxt == "Stop")
+					stopButtonTxt = "Start";
+				else stopButtonTxt = "Stop";
 			}
 			if (ImGui::Button("Reset Path"))
 			{
