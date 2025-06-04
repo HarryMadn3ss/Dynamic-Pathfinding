@@ -98,8 +98,12 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				break;				
 			default:
 				break;
-			}			
-			InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode);		
+			}	
+
+			if (static_cast<Algorithm>(_algIndex) == DSTARLITE)
+			{
+				InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode, _isErasing);	
+			}
 		}
 
 		//imgui frame
@@ -210,7 +214,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			static const char* stopButtonTxt = "Stop";
 			if (ImGui::Button(stopButtonTxt))
 			{
-				isStopped = !isStopped;
+				_isStopped = !_isStopped;
 				if (stopButtonTxt == "Stop")
 					stopButtonTxt = "Start";
 				else stopButtonTxt = "Stop";
@@ -219,6 +223,8 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			{
 				_grid->ResetGrid();
 			}
+
+			ImGui::Checkbox("Eraser", &_isErasing);
 
 			_timeTaken = duration_cast<duration<float>>(_clockEnd - _clockStart).count();
 			ImGui::Text("Time Taken: \n%f ms", (_timeTaken/60) * 1000);
@@ -237,7 +243,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 
 		bool reachedNode = false;
 
-		if (!isStopped)
+		if (!_isStopped)
 		{
 			switch (static_cast<Algorithm>(_algIndex))
 			{

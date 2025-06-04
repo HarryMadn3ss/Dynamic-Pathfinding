@@ -15,7 +15,7 @@ bool InputManager::HandleKeyInput(SDL_Event* e)
 }
 	static bool isPainting = false;
 
-void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent, Vector2 nextNode)
+void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent, Vector2 nextNode, bool isErasing)
 {
 	//mouse pos
 	int x, y;
@@ -79,7 +79,8 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent, Vect
 		if (node == grid->GetGridNode(nextNode.x, nextNode.y)) return;
 		if (node && !node->curentGoal)
 		{
-			node->walkable = !node->walkable;
+			if (isErasing) node->walkable = true;
+			else node->walkable = false;
 			if (!node->walkable) node->rhsCost = std::numeric_limits<float>::infinity();
 			else node->rhsCost = 0.0f;
 			node->curentGoal = false;

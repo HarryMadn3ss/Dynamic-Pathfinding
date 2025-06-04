@@ -39,7 +39,8 @@ private:
 
 	std::chrono::time_point<std::chrono::system_clock> _clockStart, _clockEnd;
     float _timeTaken;
-	bool isStopped = false;
+	bool _isStopped = false;
+	bool _isErasing = false;
 	
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
 	int _algIndex = 0;
