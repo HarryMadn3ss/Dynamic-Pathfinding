@@ -40,6 +40,8 @@ void InputManager::HandleMouseClick(SDL_Event* e, Grid* grid, Agent& agent, Vect
 			{
 				node->curentGoal = true;
 				node->walkable = true;
+				if(grid->goal)
+					grid->goal->curentGoal = false;
 				grid->goal = node;
 			}
 			else if (node && node == grid->goal)

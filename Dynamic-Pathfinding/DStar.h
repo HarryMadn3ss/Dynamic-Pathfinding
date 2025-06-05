@@ -22,6 +22,6 @@ private:
 public:
 	bool CreatePath(Grid& grid, Vector2 start);
 	bool RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal);
-	bool MoveForward(Grid& grid, Agent& agent);
+	int MoveForward(Grid& grid, Agent& agent);
 };
 

@@ -269,8 +269,9 @@ bool DStar::RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal)
     return false;
 }
 
-bool DStar::MoveForward(Grid& grid, Agent& agent)
+int DStar::MoveForward(Grid& grid, Agent& agent)
 {
+    int ret = 1;
     //if node infront is locally incosistant the goal is now set to inconsistant's parent and the start is the current 
     if (!CheckConsistency(*grid.GetGridNode(finalPath[finalPath.size() - 1].x / 20, finalPath[finalPath.size() - 1].y / 20)))
     {        
@@ -286,8 +287,13 @@ bool DStar::MoveForward(Grid& grid, Agent& agent)
                 CreatePath(grid, agent.GetPos());
                 printf("Creating New Path\n");
                 //count = 0;
+                ret = 2;
             }
-            else count++;
+            else
+            {
+                ret = 1;
+                count++;
+            }
         }
         
         if(count > 0)
@@ -295,8 +301,9 @@ bool DStar::MoveForward(Grid& grid, Agent& agent)
             printf("got stuck!!!\n");
             finalPath.clear();
             CreatePath(grid, agent.GetPos());
+            ret = 2;
         }
     }
     
-    return true;
+    return ret;
 }

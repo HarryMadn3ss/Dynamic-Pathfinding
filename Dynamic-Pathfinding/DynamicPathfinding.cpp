@@ -136,11 +136,6 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 
 			if (ImGui::Button("Find Path"))
 			{
-				_colourChangeCount += 10;
-				_mutR = std::rand() % 11;
-				_mutG = std::rand() % 11;
-				_mutB = std::rand() % 11;
-
 				_pathfound = true;
 				_takeStep = false;
 				_grid->ResetGrid();
@@ -168,6 +163,11 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				case DSTARLITE:
 					if (_grid->goal)
 					{
+						_colourChangeCount += 10;
+						_mutR = std::rand() % 11;
+						_mutG = std::rand() % 11;
+						_mutB = std::rand() % 11;
+
 						_clockStart = std::chrono::system_clock::now();
 						//printf("Player Pos: %f\n", _agent->GetPos().x);
 						_dStar->CreatePath(*_grid, _agent->GetPos());
@@ -292,8 +292,16 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 			case DSTARLITE:
 				if (_dStar->finalPath.size() > 0)
 				{
-					if (_dStar->MoveForward(*_grid, *_agent))
+					int check = _dStar->MoveForward(*_grid, *_agent);
+					if (check != 0)
 					{
+						if (check == 2)
+						{
+							_mutR = std::rand() % 11;
+							_mutG = std::rand() % 11;
+							_mutB = std::rand() % 11;
+						}
+
 						if (_dStar->finalPath.size() == 0)
 						{
 							_nextNode = Vector2();
