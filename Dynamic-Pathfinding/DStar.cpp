@@ -209,8 +209,8 @@ bool DStar::RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal)
             GridNode* neighbour = GetNeighbour(grid, current, i);
             //neighbour->parent = nullptr;
 
-            int bob = CheckChangedNeighbours(neighbour);
-            if (bob == -1)
+            int changedNeighbours = CheckChangedNeighbours(neighbour);
+            if (changedNeighbours == -1)
             {
                 continue;
             }
@@ -284,7 +284,7 @@ bool DStar::MoveForward(Grid& grid, Agent& agent)
             if (!check)
             {
                 CreatePath(grid, agent.GetPos());
-                printf("bob\n");
+                printf("Creating New Path\n");
                 //count = 0;
             }
             else count++;

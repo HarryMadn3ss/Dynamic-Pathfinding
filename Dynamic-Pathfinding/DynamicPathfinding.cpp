@@ -100,7 +100,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 				break;
 			}	
 
-			if (static_cast<Algorithm>(_algIndex) == DSTARLITE)
+			if(_pathfound == false || static_cast<Algorithm>(_algIndex) == DSTARLITE)		
 			{
 				InputManager::HandleMouseClick(&e, _grid, *_agent, _nextNode, _isErasing);	
 			}
@@ -136,6 +136,12 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 
 			if (ImGui::Button("Find Path"))
 			{
+				_colourChangeCount += 10;
+				_mutR = std::rand() % 11;
+				_mutG = std::rand() % 11;
+				_mutB = std::rand() % 11;
+
+				_pathfound = true;
 				_takeStep = false;
 				_grid->ResetGrid();
 				switch (static_cast<Algorithm>(_algIndex))
@@ -163,7 +169,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 					if (_grid->goal)
 					{
 						_clockStart = std::chrono::system_clock::now();
-						printf("Player Pos: %f", _agent->GetPos().x);
+						//printf("Player Pos: %f\n", _agent->GetPos().x);
 						_dStar->CreatePath(*_grid, _agent->GetPos());
 						_clockEnd = std::chrono::system_clock::now();
 					}
@@ -239,7 +245,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 		//doesnt clear paints over with the old colour
 		SDL_RenderClear(_renderer);
 
-		_grid->RenderGrid(_renderer);	
+		_grid->RenderGrid(_renderer, _colourChangeCount, _mutR, _mutG, _mutB);	
 
 		bool reachedNode = false;
 
@@ -263,6 +269,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 						}
 					}
 				}
+				else _pathfound = false;
 				break;
 			case ASTAR:
 				if (_aStar->finalPath.size() > 0)
@@ -280,6 +287,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 						}
 					}
 				}
+				else _pathfound = false;
 				break;
 			case DSTARLITE:
 				if (_dStar->finalPath.size() > 0)
@@ -309,6 +317,7 @@ void DynamicPathfinding::GameLoop(SDL_Event& e)
 						}
 					}
 				}
+				else _pathfound = false;
 				break;
 			default:
 				break;

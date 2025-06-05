@@ -41,7 +41,12 @@ private:
     float _timeTaken;
 	bool _isStopped = false;
 	bool _isErasing = false;
-	
+	bool _pathfound = false;
+	int _colourChangeCount = 0;
+	int _mutR = 0;
+	int _mutG = 0;
+	int _mutB = 0;
+
 	const char* _dropdownOptions[3] = { "Dijkstra", "A*", "D* Lite" };
 	int _algIndex = 0;
 	Vector2 _nextNode = Vector2();

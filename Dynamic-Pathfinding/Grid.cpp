@@ -96,8 +96,9 @@ void Grid::ReGenerateGrid(std::string path)
 	myFile.close();
 }
 
-void Grid::RenderGrid(SDL_Renderer* renderer)
+void Grid::RenderGrid(SDL_Renderer* renderer, int colourChangeCount, int mutR, int mutG, int mutB)
 {
+
 	//TODO: needs a refactor soon
 	for (int i = 0; i < GRID_HEIGHT; i++)
 	{
@@ -112,14 +113,14 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 			}
 			if (grid[j][i].inPath)
 			{
+				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };				
+				SDL_SetRenderDrawColor(renderer, 0x00 + (colourChangeCount * mutR), 0x00 + (colourChangeCount * mutG), 0x00 + (colourChangeCount * mutB), 0xff);
+				SDL_RenderFillRect(renderer, &rect);
+				continue;
 				//SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
 				//SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
-				//SDL_RenderFillRect(renderer, &rect);
+				//SDL_RenderDrawRect(renderer, &rect);
 				//continue;
-				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
-				SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
-				SDL_RenderDrawRect(renderer, &rect);
-				continue;
 			}
 			if (grid[j][i].searched)
 			{
@@ -142,7 +143,7 @@ void Grid::RenderGrid(SDL_Renderer* renderer)
 				SDL_RenderFillRect(renderer, &fillRect);
 			}
 		}
-	}
+	}	
 }
 
 GridNode* Grid::GetGridNode(int x, int y)

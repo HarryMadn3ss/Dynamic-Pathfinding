@@ -68,7 +68,7 @@ public:
 	void GenerateGrid();
 	void ReGenerateGrid(std::string path);
 
-	void RenderGrid(SDL_Renderer* renderer);
+	void RenderGrid(SDL_Renderer* renderer, int colourChangeCount, int mutR, int mutG, int mutB);
 
 	GridNode* GetGridNode(int x, int y);
 
