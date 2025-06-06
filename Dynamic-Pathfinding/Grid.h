@@ -24,6 +24,7 @@ struct GridNode
 	bool curentGoal = false;
 	bool inPath = false;
 	bool searched = false;
+	bool updatedPath = false;
 
 	GridNode()
 	{

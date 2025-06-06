@@ -110,14 +110,28 @@ void Grid::RenderGrid(SDL_Renderer* renderer, int colourChangeCount, int mutR, i
 				SDL_RenderFillRect(renderer, &outlineRect);
 				continue;
 			}	
-			else if (grid[j][i].inPath && !grid[j][i].curentGoal)
+			else if (grid[j][i].updatedPath && grid[j][i].inPath)
 			{
 				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
 				SDL_SetRenderDrawColor(renderer, 0xFF + (colourChangeCount * mutR), 0xAA + (colourChangeCount * mutG), 0x00 + (colourChangeCount * mutB), 0xff);
 				SDL_RenderFillRect(renderer, &rect);
 				continue;
 			}
-			else if (grid[j][i].searched && !grid[j][i].curentGoal)
+			else if (grid[j][i].updatedPath && grid[j][i].searched)
+			{
+				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
+				SDL_SetRenderDrawColor(renderer, 0xFF + (colourChangeCount * mutR), 0xAA + (colourChangeCount * mutG), 0x00 + (colourChangeCount * mutB), 0xff);
+				SDL_RenderDrawRect(renderer, &rect);
+				continue;
+			}
+			else if (grid[j][i].inPath)
+			{
+				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
+				SDL_RenderFillRect(renderer, &rect);
+				continue;
+			}
+			else if (grid[j][i].searched)
 			{
 				SDL_Rect rect = { j * 20, i * 20, 20.0f, 20.0f };
 				SDL_SetRenderDrawColor(renderer, 0xFF, 0xAA, 0x00, 0xff);
@@ -179,6 +193,7 @@ void Grid::ResetGrid()
 			grid[j][i].gCost = 1.0f;
 			grid[j][i].hCost = 0.0f;
 			grid[j][i].fCost = 0.0f;
+			grid[j][i].updatedPath = false;
 		}
 	}
 }

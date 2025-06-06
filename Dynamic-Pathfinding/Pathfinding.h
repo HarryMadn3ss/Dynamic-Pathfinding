@@ -18,7 +18,7 @@ public:
 	Pathfinding();
 
 	std::vector<Vector2> finalPath;
-	virtual bool CreatePath(Grid& grid, Vector2 start) = 0;
+	virtual bool CreatePath(Grid& grid, Vector2 start) = 0;	
 
 };
 

@@ -19,6 +19,7 @@ private:
 	float GetTravelCost(int dir);
 
 	int count = 0;
+	bool _hasChanged = false;
 public:
 	bool CreatePath(Grid& grid, Vector2 start);
 	bool RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal);

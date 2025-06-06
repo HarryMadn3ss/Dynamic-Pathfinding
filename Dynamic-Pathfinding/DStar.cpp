@@ -52,7 +52,7 @@ float DStar::GetTravelCost(int dir)
 }
 
 bool DStar::CreatePath(Grid& grid, Vector2 start)
-{
+{    
     count = 0;
     //clear lists
     finalPath.clear();
@@ -131,6 +131,11 @@ bool DStar::CreatePath(Grid& grid, Vector2 start)
         }
 
         current->searched = true;
+        if (current->updatedPath = true) current->updatedPath = false;
+        if (_hasChanged)
+        {
+            current->updatedPath = true;
+        }
         closedList.push_back(current);
         openList.erase(openList.begin() + CheckOpenList(current));
 
@@ -259,6 +264,11 @@ bool DStar::RecalculatePath(Grid& grid, Vector2 start, Vector2 _goal)
         }
 
         current->searched = true;
+        if (current->updatedPath = true) current->updatedPath = false;
+        if (_hasChanged)
+        {
+            current->updatedPath = true;
+        }
         closedList.push_back(current);
         openList.erase(openList.begin() + CheckOpenList(current));
 
@@ -276,6 +286,7 @@ int DStar::MoveForward(Grid& grid, Agent& agent)
     if (!CheckConsistency(*grid.GetGridNode(finalPath[finalPath.size() - 1].x / 20, finalPath[finalPath.size() - 1].y / 20)))
     {        
         printf("nodes are inconsistant\n");
+        _hasChanged = true;
 
         if (finalPath.size() > 1)
         {
@@ -284,9 +295,8 @@ int DStar::MoveForward(Grid& grid, Agent& agent)
             //might be able to check if new path has openned based on a change but would only count if the whole grid is scanned first like how D* does it
             if (!check)
             {
-                CreatePath(grid, agent.GetPos());
-                printf("Creating New Path\n");
-                //count = 0;
+                CreatePath(grid, agent.GetPos());          
+                printf("Creating New Path\n");                
                 ret = 2;
             }
             else
@@ -300,7 +310,7 @@ int DStar::MoveForward(Grid& grid, Agent& agent)
         {
             printf("got stuck!!!\n");
             finalPath.clear();
-            CreatePath(grid, agent.GetPos());
+            CreatePath(grid, agent.GetPos());       
             ret = 2;
         }
     }
